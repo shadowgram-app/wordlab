@@ -17,7 +17,7 @@
 ```
 wordlab/
 ├── index.html          # 메인 학습 앱
-├── admin.html          # 관리자 실시간 대시보드 (비밀번호 게이트)
+├── teacher-9f3k.html          # 관리자 실시간 대시보드 (비밀번호 게이트)
 ├── css/style.css       # 전체 스타일
 ├── js/
 │   ├── config.js       # Supabase URL/키 + 관리자 비밀번호
@@ -44,14 +44,14 @@ wordlab/
 3. **복습(SRS)**: 예정된 단어를 자동으로 띄워 복습 → 정답이면 간격이 늘어남
 4. **4지선다·받아쓰기**로 테스트 (틀리면 자동으로 오답·SRS에 반영)
 5. **오답**: 약점 단어만 집중 복습
-6. 선생님·학부모: `admin.html`에서 전체 학생 진도를 실시간 확인
+6. 선생님·학부모: `teacher-9f3k.html`에서 전체 학생 진도를 실시간 확인
 
 ---
 
 ## 배포 (현재 라이브)
 
 - 학생용: https://shadowgram-app.github.io/wordlab/
-- 관리자용: https://shadowgram-app.github.io/wordlab/admin.html · 비밀번호: `config.js`의 `ADMIN_PASSWORD`
+- 관리자용: https://shadowgram-app.github.io/wordlab/teacher-9f3k.html · 비밀번호: `config.js`의 `ADMIN_PASSWORD`
 
 ### 코드 수정 후 재배포
 GitHub Desktop에서 변경 파일 **Commit to main → Push origin** → 약 1분 뒤 자동 재배포.

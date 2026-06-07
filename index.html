@@ -44,7 +44,8 @@
 
     <!-- 모드 탭 -->
     <div class="bar">
-      <button class="tab on" data-mode="flash">플래시카드</button>
+      <button class="tab on" data-mode="me">🏆 내 현황</button>
+      <button class="tab" data-mode="flash">플래시카드</button>
       <button class="tab" data-mode="srs">복습(SRS) <span class="badge" id="badgeSrs"></span></button>
       <button class="tab" data-mode="quiz">4지선다</button>
       <button class="tab" data-mode="dict">받아쓰기</button>
@@ -60,20 +61,6 @@
     <div class="stat" id="stat"></div>
 
     <div class="panel" id="panel"></div>
-
-    <!-- 진도 코드 공유 + 관리자 -->
-    <div class="admin">
-      <h3>진도 코드 공유 (선생님·학부모용)</h3>
-      <p>"진도 코드 만들기"를 누르면 현재 진도가 코드로 나옵니다. 실시간 전체 현황은 <a href="admin.html">관리자 대시보드</a>에서 확인하세요.</p>
-      <div class="code" id="codeBox">아직 코드가 없습니다.</div>
-      <div class="arow">
-        <button class="btn solid" id="genCode">진도 코드 만들기</button>
-        <input id="loadInput" placeholder="전달받은 진도 코드 붙여넣기"/>
-        <button class="btn" id="loadCode">코드 불러오기</button>
-        <button class="btn" id="resetAll">진도 초기화</button>
-      </div>
-    </div>
-    <div class="adminlink"><a href="admin.html">→ 관리자 대시보드 (선생님 전용)</a></div>
   </section>
 
   <div class="toast" id="toast"></div>

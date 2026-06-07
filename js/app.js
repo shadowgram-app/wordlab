@@ -65,7 +65,7 @@ function enterApp(email){
   else{ sync.textContent='● 이 기기에만 저장 (오프라인 모드)'; sync.className='synced off'; }
   buildScopeSelect();
   App.updateStats();
-  switchMode('flash');
+  switchMode('me');
 }
 function logout(){ Storage.setEmail(''); App.progress = Storage.emptyProgress(); showLogin(); }
 
@@ -124,9 +124,6 @@ function bind(){
   $('#emailInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
   $('#logoutBtn').onclick = logout;
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>switchMode(t.dataset.mode));
-  $('#genCode').onclick = genCode;
-  $('#loadCode').onclick = loadCode;
-  $('#resetAll').onclick = resetAll;
   const rt=$('#rootsToggle'); if(rt) rt.onclick=()=>$('#rootsPanel').classList.toggle('hidden');
 }
 document.addEventListener('DOMContentLoaded', ()=>{ bind(); buildRoots(); showLogin(); });

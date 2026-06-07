@@ -214,12 +214,83 @@ function renderWeak(){
   $('#again').onclick=(e)=>{ e.stopPropagation(); rate(false); };
 }
 
+/* ---------------- 내 현황 (학생 자기 진도·성취도) ---------------- */
+function dayProgress(){
+  const out=[];
+  for(let d=1; d<=DAYS; d++){
+    const idx=getDayIndices(d); let learned=0, mastered=0;
+    idx.forEach(i=>{ const s=SRS.get(App.progress.known, WORDS[i].w); if(SRS.isLearned(s))learned++; if(SRS.isMastered(s))mastered++; });
+    out.push({day:d, total:idx.length, learned, mastered});
+  }
+  return out;
+}
+function renderMe(){
+  App.state={mode:'me'};
+  const c = SRS.counts(App.progress.known, WORDS);
+  const pct = Math.round(c.learned/TOTAL*100);
+  const C = 2*Math.PI*52, dash = (c.learned/TOTAL)*C;
+  const days = dayProgress();
+  const badges = [
+    {i:'🌱', n:'첫걸음', d:'첫 단어 학습', e:c.seen>=1},
+    {i:'📗', n:'Day 1 완료', d:'Day 1 전부 익힘', e:days[0] && days[0].learned===days[0].total},
+    {i:'⭐', n:'첫 마스터', d:'단어 1개 마스터', e:c.mastered>=1},
+    {i:'🔥', n:'50 익힘', d:'50단어 익힘', e:c.learned>=50},
+    {i:'💯', n:'100 익힘', d:'100단어 익힘', e:c.learned>=100},
+    {i:'🎯', n:'오답 정복', d:'오답 0개', e:c.weak===0 && c.seen>0},
+    {i:'🏆', n:'200 마스터', d:'전부 마스터', e:c.mastered>=TOTAL},
+  ];
+  const dayCells = days.map(p=>{
+    const r = p.learned/p.total;
+    const cls = p.mastered===p.total ? 'full' : (r>=1?'learned':(r>0?'partial':''));
+    return `<div class="daycell ${cls}" title="Day ${p.day}: 익힘 ${p.learned}/${p.total}, 마스터 ${p.mastered}">
+      <span class="dn">${p.day}</span><span class="dc">${p.learned}/${p.total}</span></div>`;
+  }).join('');
+  const badgeCells = badges.map(b=>`<div class="badge2 ${b.e?'on':''}" title="${b.d}"><span class="bi">${b.i}</span><span class="bn">${b.n}</span></div>`).join('');
+  $('#panel').innerHTML = `
+    <div class="scopetag">🏆 내 학습 현황</div>
+    <div class="me-top">
+      <div class="me-ring">
+        <svg viewBox="0 0 120 120" width="130" height="130">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="12"/>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="url(#g)" stroke-width="12" stroke-linecap="round"
+            stroke-dasharray="${dash.toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 60 60)"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--accent2)"/><stop offset="1" stop-color="var(--gold)"/></linearGradient></defs>
+        </svg>
+        <div class="me-ringtxt"><b>${pct}%</b><span>익힘 ${c.learned}/${TOTAL}</span></div>
+      </div>
+      <div class="me-kpis">
+        <div class="mekpi"><div class="num">${c.seen}</div><div class="lbl">학습</div></div>
+        <div class="mekpi"><div class="num">${c.learned}</div><div class="lbl">익힘</div></div>
+        <div class="mekpi"><div class="num">${c.mastered}</div><div class="lbl">마스터</div></div>
+        <div class="mekpi due"><div class="num">${c.due}</div><div class="lbl">복습대기</div></div>
+        <div class="mekpi weak"><div class="num">${c.weak}</div><div class="lbl">오답</div></div>
+      </div>
+    </div>
+    <div class="me-actions">
+      ${c.due>0 ? `<button class="btn solid" id="goSrs">🔁 복습 ${c.due}개 시작</button>` : ''}
+      <button class="btn" id="goFlash">📖 단어 학습 이어서</button>
+      ${c.weak>0 ? `<button class="btn again" id="goWeak">🎯 오답 ${c.weak}개 복습</button>` : ''}
+    </div>
+    <div class="me-sec">Day별 진척 <span class="me-hint">(칸을 누르면 그 Day 학습)</span></div>
+    <div class="daygrid" id="daygrid">${dayCells}</div>
+    <div class="me-sec">달성 배지 <span class="me-hint">${badges.filter(b=>b.e).length}/${badges.length}</span></div>
+    <div class="badges">${badgeCells}</div>`;
+  const gs=$('#goSrs'); if(gs) gs.onclick=()=>switchMode('srs');
+  $('#goFlash').onclick=()=>switchMode('flash');
+  const gw=$('#goWeak'); if(gw) gw.onclick=()=>switchMode('weak');
+  document.querySelectorAll('#daygrid .daycell').forEach((el,i)=>{
+    el.onclick=()=>{ App.scope={type:'day', day:i+1}; const sel=$('#scopeSel'); if(sel) sel.value='day:'+(i+1); switchMode('flash'); };
+  });
+}
+
 /* ---------------- 모드 전환 ---------------- */
 function switchMode(m){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.mode===m));
   // 범위 선택은 flash/quiz/dict 에만 적용
-  const sb=$('#scopeBar'); if(sb) sb.classList.toggle('dim', (m==='srs'||m==='weak'));
-  if(m==='flash') startFlash();
+  const sb=$('#scopeBar'); if(sb) sb.classList.toggle('dim', (m==='srs'||m==='weak'||m==='me'));
+  if(m==='me') renderMe();
+  else if(m==='flash') startFlash();
   else if(m==='srs') startSrs();
   else if(m==='quiz') startQuiz();
   else if(m==='dict') startDict();

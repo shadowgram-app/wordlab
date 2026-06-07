@@ -43,7 +43,7 @@ const SRS = (function(){
   const isLearned  = s => s.box>=LEARNED_BOX;
   const isMastered = s => s.box>=MASTER_BOX;
   const isDue      = (s, now) => s.box>=1 && s.due<=(now||Date.now());
-  const isWeak     = s => s.seen>0 && (s.miss>0 || s.box<=2);
+  const isWeak     = s => s.miss>0 && s.box<MASTER_BOX;   // 한 번이라도 틀린(아직 마스터 전) 단어 = 오답
 
   // 복습 예정(due) 단어 목록 — 가장 오래된(가장 급한) 순
   function dueList(known, words){

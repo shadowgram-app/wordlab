@@ -24,12 +24,13 @@
       <div class="kicker">Admin · Stage 1 · 200단어</div>
       <h1>학생 진도 현황</h1>
       <div class="sub" id="liveWrap"><span class="livebadge" id="liveBadge"><span class="livedot"></span>실시간 연결됨</span></div>
+      <div class="sub" style="margin-top:4px">학습한 모든 학생이 자동으로 표시됩니다 · 검색은 학생이 많을 때만 쓰세요</div>
     </header>
 
     <div class="dashstats" id="kpis"></div>
 
     <div class="toolbar">
-      <input type="search" id="search" placeholder="이메일 검색…"/>
+      <input type="search" id="search" placeholder="이메일로 검색 (선택)"/>
       <div style="display:flex;gap:8px">
         <button class="btn" id="refreshBtn" style="font-size:13px;padding:8px 14px">새로고침</button>
         <a class="btn" href="index.html" style="font-size:13px;padding:8px 14px;text-decoration:none">← 학습 앱</a>
@@ -131,7 +132,12 @@
       return (x-y)*sortDir;
     });
     const tb=$('#rows');
-    if(!list.length){ tb.innerHTML='<tr><td colspan="5" class="empty">아직 학생 데이터가 없습니다.</td></tr>'; return; }
+    if(!list.length){
+      tb.innerHTML = q
+        ? '<tr><td colspan="5" class="empty">"'+q+'" 검색 결과가 없습니다.</td></tr>'
+        : '<tr><td colspan="5" class="empty">아직 학습한 학생이 없습니다.<br>학생이 앱에 이메일로 로그인하면 자동으로 여기에 표시됩니다.</td></tr>';
+      return;
+    }
     tb.innerHTML = list.map(r=>{
       const total = r.total || TOTAL_DEFAULT;
       const kc = r.known_count||0;

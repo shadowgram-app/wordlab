@@ -15,9 +15,9 @@
       ※ 정적 사이트 특성상 클라이언트 측 가벼운 잠금입니다. 보안 강화는 README 참고.
    ============================================================ */
 window.WORDLAB_CONFIG = {
-  SUPABASE_URL:      "",   // ← 여기에 Project URL
-  SUPABASE_ANON_KEY: "",   // ← 여기에 anon public key
-  ADMIN_PASSWORD:    "wordlab-admin",   // ← 관리자 비밀번호 (변경 권장)
+  SUPABASE_URL:      "https://jjobkbqjykwmvfpdkpoo.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_zBAwLN-3Z7t33ZaD0SggSQ_FK-6RHCz",   // publishable 키 (공개 안전)
+  ADMIN_PASSWORD:    "wordlab-admin",   // ← 관리자 비밀번호 (공개 레포라 소스에 노출됨. 변경 권장)
 };
 
 /* Supabase 설정 여부 */

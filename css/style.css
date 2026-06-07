@@ -1,0 +1,212 @@
+/* ============================================================
+   WordLab · Level 3 수능 기본 어휘 암기장
+   프로토타입 인라인 CSS 이전 + 로그인/TTS/관리자 스타일 추가
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&display=swap');
+
+:root{
+  --ink:#1c2530;
+  --paper:#f4efe6;
+  --card:#fbf8f1;
+  --accent:#c2553a;
+  --accent2:#2f6f5e;
+  --gold:#b08436;
+  --line:#d8cfbf;
+  --shadow:rgba(40,30,20,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Gowun Batang',serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(176,132,54,.10), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(47,111,94,.10), transparent 42%),
+    var(--paper);
+  min-height:100vh;
+  padding:22px 16px 60px;
+}
+.wrap{max-width:760px;margin:0 auto}
+header.top{text-align:center;margin-bottom:18px}
+.kicker{font-family:'Fraunces',serif;letter-spacing:.22em;font-size:12px;color:var(--gold);text-transform:uppercase}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:30px;line-height:1.15;margin:4px 0 2px}
+.sub{font-size:13px;color:#6c6256}
+
+/* ---------- email login gate ---------- */
+.login{
+  max-width:420px;margin:8vh auto 0;text-align:center;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 14px 40px var(--shadow);padding:34px 28px;
+}
+.login .kicker{display:block;margin-bottom:6px}
+.login h1{font-size:26px;margin-bottom:6px}
+.login p{font-size:13.5px;color:#6c6256;line-height:1.6;margin-bottom:20px}
+.login input{
+  width:100%;font-family:'Fraunces',serif;font-size:17px;text-align:center;
+  padding:13px 14px;border:1.5px solid var(--line);border-radius:10px;
+  background:var(--paper);color:var(--ink);outline:none;margin-bottom:8px
+}
+.login input:focus{border-color:var(--accent)}
+.login .err{color:var(--accent);font-size:12.5px;min-height:18px;margin-bottom:8px}
+.login .btn{width:100%;justify-content:center}
+.login .note{font-size:11.5px;color:#a99e8c;margin-top:14px;line-height:1.5}
+
+.userbar{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-size:12.5px;color:#6c6256;margin-bottom:10px;flex-wrap:wrap
+}
+.userbar b{color:var(--ink)}
+.userbar .link{background:none;border:none;color:var(--accent);cursor:pointer;font-family:inherit;font-size:12.5px;text-decoration:underline}
+.synced{font-size:11.5px;color:var(--accent2)}
+.synced.off{color:var(--gold)}
+
+.bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0 8px}
+.tab{
+  font-family:'Fraunces',serif;font-weight:600;font-size:14px;
+  padding:9px 16px;border:1.5px solid var(--ink);border-radius:999px;
+  background:transparent;color:var(--ink);cursor:pointer;transition:.18s;
+}
+.tab:hover{transform:translateY(-1px)}
+.tab.on{background:var(--ink);color:var(--paper)}
+.progress{
+  display:flex;align-items:center;gap:10px;justify-content:center;
+  font-size:12.5px;color:#6c6256;margin-bottom:14px
+}
+.pbar{height:8px;width:180px;background:var(--line);border-radius:99px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--gold));width:0%;transition:.4s}
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 10px 30px var(--shadow);
+  padding:26px 22px;min-height:300px;position:relative;overflow:hidden
+}
+.panel:before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='1' cy='1' r='.5' fill='%23000' opacity='.03'/%3E%3C/svg%3E");pointer-events:none}
+
+/* ---------- TTS speaker button ---------- */
+.spk{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:50%;border:1.5px solid var(--gold);
+  background:var(--paper);color:var(--gold);cursor:pointer;font-size:18px;
+  transition:.15s;vertical-align:middle;line-height:1;padding:0
+}
+.spk:hover{background:var(--gold);color:#fff;transform:scale(1.06)}
+.spk:active{transform:scale(.94)}
+.spk.sm{width:30px;height:30px;font-size:15px;border-width:1.2px}
+
+/* flashcard */
+.fc{perspective:1200px;cursor:pointer}
+.fcInner{position:relative;width:100%;min-height:230px;transition:transform .55s;transform-style:preserve-3d}
+.fc.flip .fcInner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px}
+.back{transform:rotateY(180deg)}
+.word{font-family:'Fraunces',serif;font-weight:900;font-size:46px;color:var(--accent)}
+.wordrow{display:flex;align-items:center;gap:12px;justify-content:center}
+.pos{font-size:13px;color:var(--gold);letter-spacing:.12em;margin-top:6px;text-transform:uppercase}
+.mean{font-size:26px;font-weight:700;margin-bottom:10px}
+.ex{font-size:15px;color:#5c5346;line-height:1.6;max-width:90%}
+.ex b{color:var(--accent2)}
+.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:11.5px;color:#a99e8c}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:10px}
+.btn{font-family:'Fraunces',serif;font-weight:600;font-size:14px;padding:10px 18px;border-radius:10px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:.16s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.solid:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.counter{font-size:13px;color:#6c6256}
+.know{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.know .btn{min-width:120px;justify-content:center}
+.btn.good{border-color:var(--accent2);color:var(--accent2)}
+.btn.good:hover{background:var(--accent2);color:#fff}
+.btn.again{border-color:var(--accent);color:var(--accent)}
+.btn.again:hover{background:var(--accent);color:#fff}
+
+/* quiz */
+.qword{font-family:'Fraunces',serif;font-weight:900;font-size:40px;color:var(--accent);text-align:center}
+.qrow{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:6px}
+.qprompt{text-align:center;font-size:14px;color:#6c6256;margin-bottom:18px}
+.opts{display:grid;gap:10px}
+.opt{font-size:17px;text-align:left;padding:13px 16px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;transition:.14s;font-family:'Gowun Batang',serif}
+.opt:hover{border-color:var(--ink)}
+.opt.correct{background:#e3efe9;border-color:var(--accent2);color:var(--accent2);font-weight:700}
+.opt.wrong{background:#f6e4df;border-color:var(--accent);color:var(--accent)}
+.opt:disabled{cursor:default}
+
+/* dictation */
+.dHint{text-align:center;font-size:14px;color:#6c6256;margin-bottom:6px}
+.dMean{font-family:'Fraunces',serif;font-weight:600;font-size:30px;text-align:center;margin-bottom:8px}
+.dEx{text-align:center;font-size:15px;color:#5c5346;margin-bottom:18px;line-height:1.6}
+.dEx .blank{display:inline-block;min-width:80px;border-bottom:2px solid var(--accent);margin:0 4px}
+.dInput{display:block;width:100%;max-width:340px;margin:0 auto;font-family:'Fraunces',serif;font-size:24px;text-align:center;padding:10px 8px;border:none;border-bottom:2.5px solid var(--ink);background:transparent;color:var(--ink);outline:none}
+.dInput:focus{border-color:var(--accent)}
+.dFeed{text-align:center;margin-top:14px;font-size:16px;min-height:24px;font-weight:700}
+.dFeed.ok{color:var(--accent2)}
+.dFeed.no{color:var(--accent)}
+.reveal{font-family:'Fraunces',serif;color:var(--accent)}
+.dReveal{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:6px}
+
+/* done card */
+.done{text-align:center;padding:30px 10px}
+.done h2{font-family:'Fraunces',serif;font-size:30px;margin-bottom:8px}
+.score{font-size:50px;font-family:'Fraunces',serif;font-weight:900;color:var(--accent);margin:6px 0}
+
+/* admin (on index, fallback code share) */
+.admin{margin-top:18px;background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:16px 18px}
+.admin h3{font-family:'Fraunces',serif;font-size:16px;margin-bottom:6px;color:var(--accent2)}
+.admin p{font-size:13px;color:#6c6256;line-height:1.6;margin-bottom:10px}
+.code{font-family:'Fraunces',serif;font-size:13px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;word-break:break-all;color:var(--ink);min-height:42px}
+.arow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.arow .btn{font-size:13px;padding:8px 14px}
+.arow input{flex:1;min-width:160px;font-family:'Gowun Batang',serif;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper)}
+.stat{display:flex;gap:16px;justify-content:center;margin-top:6px;font-size:13px;color:#6c6256;flex-wrap:wrap}
+.stat b{color:var(--ink)}
+.adminlink{text-align:center;margin-top:14px;font-size:12px}
+.adminlink a{color:var(--gold)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.hidden{display:none !important}
+
+/* ============================================================
+   admin.html — 실시간 대시보드
+   ============================================================ */
+.dash{max-width:920px;margin:0 auto}
+.dash header.top{margin-bottom:14px}
+.gate{max-width:380px;margin:10vh auto 0;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px var(--shadow);padding:32px 26px}
+.gate h1{font-size:24px;margin-bottom:6px}
+.gate p{font-size:13px;color:#6c6256;margin-bottom:18px}
+.gate input{width:100%;font-family:'Fraunces',serif;font-size:18px;text-align:center;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);outline:none;margin-bottom:8px}
+.gate input:focus{border-color:var(--accent)}
+.gate .err{color:var(--accent);font-size:12.5px;min-height:18px;margin-bottom:6px}
+.gate .btn{width:100%;justify-content:center}
+
+.dashstats{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0 18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 20px;text-align:center;min-width:130px;box-shadow:0 6px 18px var(--shadow)}
+.kpi .num{font-family:'Fraunces',serif;font-weight:900;font-size:30px;color:var(--accent)}
+.kpi .lbl{font-size:12px;color:#6c6256;margin-top:2px}
+
+.livebadge{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--accent2)}
+.livedot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1.6s infinite}
+.livebadge.off{color:var(--gold)}
+.livebadge.off .livedot{background:var(--gold);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.toolbar input{font-family:'Gowun Batang',serif;font-size:13px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);min-width:200px}
+
+.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px var(--shadow);overflow:hidden}
+table.dashtbl{width:100%;border-collapse:collapse;font-size:14px}
+table.dashtbl th,table.dashtbl td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+table.dashtbl th{font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;letter-spacing:.04em;color:#6c6256;background:var(--paper);cursor:pointer;user-select:none;white-space:nowrap}
+table.dashtbl th:hover{color:var(--ink)}
+table.dashtbl tr:last-child td{border-bottom:none}
+table.dashtbl tbody tr:hover{background:rgba(176,132,54,.06)}
+.mini{height:7px;width:120px;max-width:30vw;background:var(--line);border-radius:99px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:8px}
+.minifill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--gold))}
+.pct{font-size:12.5px;color:#6c6256}
+.email{font-weight:700}
+.ago{color:#8a8073;font-size:12.5px}
+.empty{text-align:center;padding:40px 20px;color:#8a8073}
+.flash{animation:flashrow 1.2s ease}
+@keyframes flashrow{0%{background:rgba(47,111,94,.18)}100%{background:transparent}}
+
+@media (max-width:560px){
+  table.dashtbl th:nth-child(3),table.dashtbl td:nth-child(3){display:none}
+}

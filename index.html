@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordLab · Level 3 수능 기본 어휘 암기장</title>
+<meta name="description" content="고1 수능 기본 어휘 40개 — 플래시카드·4지선다·받아쓰기 3모드 + 발음 듣기">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== 이메일 로그인 게이트 ===== -->
+  <section class="login" id="loginView">
+    <span class="kicker">Vocabulary · Level 3</span>
+    <h1>수능 기본 어휘 암기장</h1>
+    <p>이메일을 입력하면 내 진도가 저장되고,<br>다음에 같은 이메일로 들어오면 이어서 학습할 수 있어요.</p>
+    <input type="email" id="emailInput" placeholder="name@example.com" autocomplete="email" inputmode="email"/>
+    <div class="err" id="loginErr"></div>
+    <button class="btn solid" id="loginBtn">시작하기</button>
+    <div class="note">비밀번호는 필요 없어요. 이메일은 진도를 구분하는 용도로만 쓰입니다.</div>
+  </section>
+
+  <!-- ===== 학습 앱 ===== -->
+  <section class="wrap hidden" id="appView">
+    <header class="top">
+      <div class="kicker">Vocabulary · Level 3</div>
+      <h1>수능 기본 어휘 암기장</h1>
+      <div class="sub">플래시카드 · 4지선다 퀴즈 · 빈칸 받아쓰기 — 40 단어 · 🔊 발음 듣기</div>
+    </header>
+
+    <div class="userbar">
+      <span><b id="whoami"></b> 님</span>
+      <span class="synced" id="syncState"></span>
+      <button class="link" id="logoutBtn">이메일 변경</button>
+    </div>
+
+    <div class="bar">
+      <button class="tab on" data-mode="card">플래시카드</button>
+      <button class="tab" data-mode="quiz">4지선다 퀴즈</button>
+      <button class="tab" data-mode="dict">빈칸 받아쓰기</button>
+    </div>
+
+    <div class="progress">
+      <span>익힘 진도</span>
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <span id="ptext">0 / 40</span>
+    </div>
+
+    <div class="panel" id="panel"></div>
+
+    <!-- 관리자 폴백: 진도 코드 공유 (Supabase 대시보드와 별개로 항상 사용 가능) -->
+    <div class="admin">
+      <h3>진도 코드 공유 (선생님·학부모용)</h3>
+      <p>"진도 코드 만들기"를 누르면 현재 진도가 코드로 나옵니다. 학생이 이 코드를 전달하면 선생님·학부모가 확인할 수 있어요. (실시간 전체 현황은 <a href="admin.html">관리자 대시보드</a>에서 확인)</p>
+      <div class="stat" id="stat"></div>
+      <div class="code" id="codeBox">아직 코드가 없습니다.</div>
+      <div class="arow">
+        <button class="btn solid" id="genCode">진도 코드 만들기</button>
+        <input id="loadInput" placeholder="전달받은 진도 코드 붙여넣기"/>
+        <button class="btn" id="loadCode">코드 불러오기</button>
+        <button class="btn" id="resetAll">진도 초기화</button>
+      </div>
+    </div>
+
+    <div class="adminlink"><a href="admin.html">→ 관리자 대시보드 (선생님 전용)</a></div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Supabase JS (설정이 비어 있어도 로드만 됨 — 자동으로 로컬 모드 폴백) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- 앱 스크립트 (순서 중요) -->
+  <script src="js/config.js"></script>
+  <script src="js/words.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/modes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -70,7 +70,7 @@
   <script src="js/supabase.js"></script>
   <script>
   const $ = s=>document.querySelector(s);
-  const TOTAL_DEFAULT = 40;
+  const TOTAL_DEFAULT = 200;
   let rowsData = [];
   let sortKey = 'updated_at', sortDir = -1;  // 기본: 최근 활동 내림차순
 
@@ -185,7 +185,8 @@
       const v=$('#codeIn').value.trim(); if(!v){ toast('코드를 붙여넣어 주세요.'); return; }
       try{
         const d=JSON.parse(decodeURIComponent(escape(atob(v))));
-        $('#codeOut').innerHTML=`<b>${d.email||'(이메일 없음)'}</b> · 날짜 ${d.date}<br>익힌 단어 ${d.known}/${d.total} · 퀴즈 최고 ${d.quiz} · 받아쓰기 최고 ${d.dict}`;
+        const learned = (d.learned!==undefined ? d.learned : d.known);
+        $('#codeOut').innerHTML=`<b>${d.email||'(이메일 없음)'}</b> · 날짜 ${d.date}<br>익힘 ${learned}/${d.total}${d.mastered!==undefined?' · 마스터 '+d.mastered:''} · 퀴즈 최고 ${d.quiz} · 받아쓰기 최고 ${d.dict}`;
       }catch(e){ toast('코드 형식이 올바르지 않아요.'); }
     };
   }

@@ -43,9 +43,20 @@ const Storage = (function(){
       level: data.level || ACTIVE_LEVEL,
     };
   }
+  // 익힌 단어 수: 새 SRS 형식(box>=3) 또는 옛 boolean(true) 모두 호환
+  function learnedCount(known){
+    let n=0;
+    for(const k in (known||{})){
+      const v = known[k];
+      if(v === true) n++;
+      else if(v && typeof v === 'object' && (v.box||0) >= 3) n++;
+    }
+    return n;
+  }
+
   async function supaSave(p){
     if(!window.supa) return false;
-    const known_count = Object.keys(p.known||{}).filter(k=>p.known[k]).length;
+    const known_count = learnedCount(p.known);
     const row = {
       email,
       known: p.known || {},

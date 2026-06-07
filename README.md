@@ -1,11 +1,14 @@
-# WordLab · Level 3 수능 기본 어휘 암기 웹앱
+# WordLab · 수능 기본 어휘 1단계 (어원·구조 200)
 
-고1 학생용 "Level 3 수능 기본 어휘 40개" 암기 웹앱.
-플래시카드 · 4지선다 퀴즈 · 빈칸 받아쓰기 3모드 + 발음 듣기(TTS) + 이메일 식별 + 실시간 관리자 대시보드.
+고1 학생용 어휘 암기 웹앱. **어원·구조 분석 200단어**를 최신 암기법으로 학습합니다.
 
-- **프론트엔드**: 정적 HTML/CSS/JS (GitHub Pages 무료 호스팅)
-- **백엔드**: Supabase (학생 진도 저장 + 실시간 대시보드)
-- **로그인**: 이메일 식별자 전용 (비밀번호·인증 메일 없음)
+- **어원 카드**: 단어를 통째로 외우지 않고 접두사·어근·접미사 구조로 이해
+- **간격 반복(SRS)**: Anki식 — 틀린 단어는 자주, 아는 단어는 간격을 늘려 복습 (장기 기억에 가장 효과적)
+- **랜덤 4지선다 / 빈칸 받아쓰기**: 능동적 인출(active recall) 테스트
+- **오답·약점 집중복습**: 틀린 단어만 모아 복습
+- **Day별 학습**: 20일 구성(하루 10단어) · 발음 듣기(TTS) · 이메일 식별 · 실시간 관리자 대시보드
+
+배포: GitHub Pages(정적 프론트) + Supabase(진도 저장·실시간 대시보드).
 
 ---
 
@@ -13,126 +16,65 @@
 
 ```
 wordlab/
-├── index.html          # 메인 학습 앱 (이메일 로그인 → 3모드)
+├── index.html          # 메인 학습 앱
 ├── admin.html          # 관리자 실시간 대시보드 (비밀번호 게이트)
 ├── css/style.css       # 전체 스타일
 ├── js/
-│   ├── config.js       # ⭐ Supabase URL/키 + 관리자 비밀번호 (배포 전 입력)
-│   ├── words.js        # 단어 데이터 (LEVELS 구조 — Level 4 확장 대비)
-│   ├── supabase.js     # Supabase 클라이언트 초기화
+│   ├── config.js       # Supabase URL/키 + 관리자 비밀번호
+│   ├── words.js        # 200단어 데이터(LEVELS 구조) + 어근·접두사 표
+│   ├── srs.js          # 간격 반복(SRS) 엔진 — Leitner 박스
+│   ├── supabase.js     # Supabase 클라이언트
 │   ├── storage.js      # 진도 저장 (Supabase + localStorage 폴백)
 │   ├── tts.js          # 발음 듣기 (Web Speech API)
-│   ├── modes.js        # 3모드 렌더/로직
-│   └── app.js          # 부트스트랩 · 이메일 로그인 · 진도 코드
-├── supabase/schema.sql # DB 테이블 + RLS
-├── .nojekyll           # GitHub Pages용 (js/ 폴더 그대로 서빙)
+│   ├── modes.js        # 5모드 렌더 (플래시카드·SRS·4지선다·받아쓰기·오답)
+│   └── app.js          # 부트스트랩·로그인·범위(Day) 선택·통계
+├── supabase/schema.sql # DB 테이블 + RLS + Realtime
 └── README.md
 ```
 
----
+## 데이터 스키마 (`words.js`)
 
-## 빠른 시작 (로컬 테스트)
+각 단어: `{ w 단어, pron 발음, pos 품사, mean 뜻, struct 어원·구조, ex 예문, exKo 해석 }`
+10단어 = 1 Day. 진도(SRS 상태)는 단어별로 `{box, due, seen, ok, miss}`로 저장됩니다.
 
-Supabase 없이도 **바로 동작**합니다 (이 기기에만 저장되는 오프라인 모드).
+## 학습 흐름
 
-```bash
-cd wordlab
-python3 -m http.server 8000
-# 브라우저에서 http://localhost:8000 접속
-```
-
-> `file://` 로 직접 열어도 되지만, 일부 브라우저에서 모듈/스크립트 제약이 있어 로컬 서버 사용을 권장합니다.
-
----
-
-## 배포 (3단계)
-
-### 1) Supabase 설정 (실시간 대시보드를 쓰려면 필수)
-
-1. [supabase.com](https://supabase.com) → 새 프로젝트 생성
-2. **SQL Editor** → `supabase/schema.sql` 내용 붙여넣고 **RUN**
-3. **Project Settings → API** 에서 두 값 복사:
-   - `Project URL`
-   - `anon` / `public` key
-4. `js/config.js` 를 열어 채우기:
-
-```js
-window.WORDLAB_CONFIG = {
-  SUPABASE_URL:      "https://xxxx.supabase.co",
-  SUPABASE_ANON_KEY: "eyJhbGci...(긴 키)",
-  ADMIN_PASSWORD:    "원하는-관리자-비밀번호",
-};
-```
-
-> 비워두면 자동으로 localStorage 전용 모드로 동작합니다(기기 간 동기화·대시보드 미작동).
-
-### 2) GitHub 레포에 푸시
-
-`shadowgram-app` 조직에 `wordlab` 레포를 만든 뒤:
-
-```bash
-cd wordlab
-git init
-git add .
-git commit -m "WordLab Level 3 어휘 앱 초기 버전"
-git branch -M main
-git remote add origin https://github.com/shadowgram-app/wordlab.git
-git push -u origin main
-```
-
-> ⚠ 이 어시스턴트는 GitHub 로그인·레포 생성·푸시를 대신 수행할 수 없습니다. 위 명령은 운영자가 직접 실행하세요.
-
-### 3) GitHub Pages 켜기
-
-레포 **Settings → Pages** → Source: `Deploy from a branch` → Branch: `main` / `/ (root)` → Save.
-약 1분 후 배포 주소:
-
-```
-https://shadowgram-app.github.io/wordlab/          ← 학생용
-https://shadowgram-app.github.io/wordlab/admin.html ← 관리자용
-```
+1. **이메일 입력** → 진도가 그 이메일로 저장됨(기기 무관 이어보기)
+2. **학습 범위(Day)** 선택 → 플래시카드로 어원과 함께 학습(알아요/몰라요)
+3. **복습(SRS)**: 예정된 단어를 자동으로 띄워 복습 → 정답이면 간격이 늘어남
+4. **4지선다·받아쓰기**로 테스트 (틀리면 자동으로 오답·SRS에 반영)
+5. **오답**: 약점 단어만 집중 복습
+6. 선생님·학부모: `admin.html`에서 전체 학생 진도를 실시간 확인
 
 ---
 
-## 사용 흐름
+## 배포 (현재 라이브)
 
-**학생**: 이메일 입력 → 3모드 학습 → 진도 자동 저장. 다음에 같은 이메일로 들어오면 이어서.
-**선생님/운영자**: `admin.html` 접속 → 비밀번호 입력 → 모든 학생 진도가 실시간 표로 표시(익힌 단어·퀴즈/받아쓰기 최고점·최근 활동). 이메일 검색·열 정렬 가능.
-**오프라인 폴백**: Supabase 미설정 시에도 학생이 "진도 코드"를 만들어 전달하면 관리자가 코드로 확인 가능.
+- 학생용: https://shadowgram-app.github.io/wordlab/
+- 관리자용: https://shadowgram-app.github.io/wordlab/admin.html · 비밀번호: `config.js`의 `ADMIN_PASSWORD`
 
----
+### 코드 수정 후 재배포
+GitHub Desktop에서 변경 파일 **Commit to main → Push origin** → 약 1분 뒤 자동 재배포.
 
-## 보안 메모 (꼭 읽어주세요)
-
-이 앱은 **인증 없는 식별자 방식**입니다. 이메일을 ID로만 쓰고 비밀번호가 없습니다.
-구조상 `anon` 키(공개 키)로 진도 테이블을 읽고 씁니다 → **저장 데이터(이메일 + 단어 암기 진도)는 사실상 공개 수준**입니다.
-단어 암기 진도라는 낮은 민감도 데이터에 맞춘 의도된 트레이드오프입니다. 민감 정보(실명·연락처 등)는 저장하지 마세요.
-
-**보안 업그레이드 경로 (필요해질 때):**
-1. **관리자 비밀번호**는 `config.js`에 평문으로 들어갑니다 → 가벼운 잠금일 뿐입니다. 진짜 보호가 필요하면 Supabase **Auth(매직링크)** + **RLS(본인 행만 접근)** 로 전환하고, 관리자 조회는 **Edge Function**(service_role 서버측)으로 옮기세요.
-2. **service_role 키는 절대 클라이언트(config.js·HTML)에 넣지 마세요.** anon 키만 사용합니다.
-3. 학생 데이터 보호를 강화하려면 테이블 직접 접근(RLS)을 막고, 저장/조회를 `SECURITY DEFINER` RPC 함수로 감싸는 방법도 있습니다(대시보드는 실시간 구독 대신 주기적 새로고침으로 전환).
+### Supabase (이미 연결됨)
+- 프로젝트 `wordlab` (Seoul) · `progress` 테이블 + RLS + Realtime 설정 완료
+- `config.js`에 Project URL + publishable 키 입력됨
+- 새 단어장/스키마 변경 시 `supabase/schema.sql`을 SQL Editor에서 실행
 
 ---
 
-## 확장: Level 4 단어장 추가
+## 보안 메모
 
-`js/words.js` 의 `LEVELS` 객체에 `L4` 를 추가하고 `ACTIVE_LEVEL` 을 바꾸면 됩니다.
+인증 없는 **이메일 식별자 방식** + 공개 레포라, publishable 키와 `ADMIN_PASSWORD`가 소스에 노출됩니다(낮은 민감도 데이터 전제). publishable 키는 RLS로 보호되어 공개해도 안전합니다. 실명·연락처 등 민감 정보는 저장하지 마세요. 강화하려면 Supabase Auth(매직링크) + 본인 행 RLS + 관리자용 Edge Function으로 전환하세요.
+
+## 확장: 2단계(Stage 2) 단어장 추가
+
+`js/words.js`의 `LEVELS`에 `S2`를 추가하고 `ACTIVE_LEVEL`을 바꾸면 됩니다. 진도는 이메일+`level`로 구분되어 저장됩니다.
 
 ```js
 const LEVELS = {
-  L3: { code:"L3", label:"Level 3 · 수능 기본 어휘", words:[ ... ] },
-  L4: { code:"L4", label:"Level 4 · ...", words:[ ... ] },   // ← 추가
+  S1: { code:"S1", label:"...", perDay:10, words:[ ... ] },
+  S2: { code:"S2", label:"...", perDay:10, words:[ ... ] },  // ← 추가
 };
-const ACTIVE_LEVEL = "L4";  // 또는 로그인 단계에서 레벨 선택 UI 추가
+const ACTIVE_LEVEL = "S2";
 ```
-
-진도는 이메일+`level` 로 구분되어 저장되므로 레벨별 진도가 섞이지 않습니다.
-
----
-
-## 기술 메모
-
-- **TTS**: 브라우저 내장 `window.speechSynthesis` (Web Speech API) — 서버·API 키 불필요. 버튼 클릭 트리거라 모바일 자동재생 차단과 무관.
-- **저장**: 로컬 즉시 저장 + Supabase 비동기 업서트(이메일 onConflict). 네트워크 실패해도 로컬엔 남습니다.
-- **실시간**: Supabase Realtime `postgres_changes` 구독 — 학생이 진도를 저장하는 순간 대시보드 행이 갱신·하이라이트됩니다.

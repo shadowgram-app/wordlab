@@ -7,5 +7,6 @@ window.WORDLAB_CONFIG = {
   SUPABASE_ANON_KEY: "sb_publishable_zBAwLN-3Z7t33ZaD0SggSQ_FK-6RHCz",   // publishable 키(공개 안전)
   ADMIN_PASSWORD:    "3894",            // 학부모·선생님 비밀번호
   TABLE:             "progress_elem",   // ★ 초등용 별도 테이블
+  AUDIO_BASE:        "../audio/",        // 발음 MP3 폴더(상위 공유)
 };
 window.SUPA_ENABLED = !!(window.WORDLAB_CONFIG.SUPABASE_URL && window.WORDLAB_CONFIG.SUPABASE_ANON_KEY);

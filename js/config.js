@@ -18,6 +18,7 @@ window.WORDLAB_CONFIG = {
   SUPABASE_URL:      "https://jjobkbqjykwmvfpdkpoo.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_zBAwLN-3Z7t33ZaD0SggSQ_FK-6RHCz",   // publishable 키 (공개 안전)
   ADMIN_PASSWORD:    "3894",   // ← 관리자 비밀번호 (공개 레포라 소스에 노출됨)
+  AUDIO_BASE:        "audio/", // 발음 MP3 폴더 경로
 };
 
 /* Supabase 설정 여부 */

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordLab 초등 · 초등 필수 영단어 150</title>
+<meta name="description" content="초등학생용 영단어 150개 — 이모지 카드·발음·간격반복(SRS)·4지선다·받아쓰기·오답복습">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="css/elem.css">
+</head>
+<body>
+
+  <!-- 로그인 -->
+  <section class="login" id="loginView">
+    <span class="kicker">Elementary · English</span>
+    <h1>초등 필수 영단어 🎒</h1>
+    <p>그림으로 즐겁게 외우는 영단어 150개.<br>이메일을 넣으면 내 진도가 저장돼요.</p>
+    <input type="email" id="emailInput" placeholder="name@example.com" autocomplete="email" inputmode="email"/>
+    <div class="err" id="loginErr"></div>
+    <button class="btn solid" id="loginBtn">시작하기</button>
+    <div class="note">비밀번호는 필요 없어요. 이메일은 진도를 구분하는 용도로만 쓰여요.</div>
+  </section>
+
+  <!-- 앱 -->
+  <section class="wrap hidden" id="appView">
+    <header class="top">
+      <div class="kicker">Elementary · 초등 필수 영단어 150</div>
+      <h1>초등 필수 영단어 🎒</h1>
+      <div class="sub">이모지 카드 · 복습(SRS) · 4지선다 · 받아쓰기 · 오답 · 🔊 발음</div>
+    </header>
+
+    <div class="userbar">
+      <span><b id="whoami"></b> 님</span>
+      <span class="synced" id="syncState"></span>
+      <button class="link" id="logoutBtn">이메일 변경</button>
+    </div>
+
+    <div class="scopebar" id="scopeBar">
+      <label>학습 범위</label>
+      <select id="scopeSel"></select>
+    </div>
+
+    <div class="bar">
+      <button class="tab on" data-mode="me">🏆 내 현황</button>
+      <button class="tab" data-mode="flash">플래시카드</button>
+      <button class="tab" data-mode="srs">복습(SRS) <span class="badge" id="badgeSrs"></span></button>
+      <button class="tab" data-mode="quiz">4지선다</button>
+      <button class="tab" data-mode="dict">받아쓰기</button>
+      <button class="tab" data-mode="weak">오답 <span class="badge" id="badgeWeak"></span></button>
+    </div>
+
+    <div class="progress">
+      <span>익힘 진도</span>
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <span id="ptext">0 / 150</span>
+    </div>
+    <div class="stat" id="stat"></div>
+
+    <div class="panel" id="panel"></div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/words.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/srs.js"></script>
+  <script src="js/tts.js"></script>
+  <script src="js/modes.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

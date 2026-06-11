@@ -1,0 +1,16 @@
+/* ============================================================
+   WordLab 초등 · 추가 스타일 (이모지 카드)  — ../css/style.css 위에 얹음
+   ============================================================ */
+.emoji{ font-size:76px; line-height:1; margin-bottom:8px; filter:drop-shadow(0 4px 8px rgba(40,30,20,.12)); }
+.emoji.sm{ font-size:44px; margin-bottom:6px; }
+
+/* 카드 글자를 초등용으로 조금 크게/또렷하게 */
+.face.front .word{ font-size:42px; }
+.dMean{ font-size:32px; }
+.fcInner{ min-height:300px; }
+
+/* 받아쓰기 화면의 이모지 가운데 */
+#panel > .emoji{ display:block; text-align:center; }
+
+/* 발음(한글) 살짝 강조 */
+.pron, .pron-c{ color:var(--accent2); font-weight:600; }
